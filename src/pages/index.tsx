@@ -6,6 +6,11 @@ import { type FormEvent } from "react";
 
 import { api, type RouterOutputs } from "~/utils/api";
 
+import dayjs from 'dayjs'
+import relativeTime from 'dayjs/plugin/relativeTime'
+
+dayjs.extend(relativeTime)
+
 type PostWithAuthor = RouterOutputs["post"]["getAll"][number]
 
 const CreatePost = () => {
@@ -50,12 +55,16 @@ const PostView = (props: {post: PostWithAuthor}) => {
       <div className="bg-slate-400 rounded-full w-12 h-12 overflow-hidden relative">
         <Image
           src={author.profileImageUrl}
-          alt={author.username || 'User Profile'}
+          alt={author.username}
           fill
         />
       </div>
       <div className="flex-grow flex flex-col mb-4">
-        <span>@{author.username}</span>
+        <div className="text-slate-300">
+          <span>{`@${author.username}`}</span>
+          {' · '}
+          <span className="font-thin">{dayjs(post.createdAt).fromNow()}</span>
+        </div>
         <p>{post.content}</p>
       </div>
     </div>
