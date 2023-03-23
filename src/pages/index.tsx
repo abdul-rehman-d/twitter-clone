@@ -9,6 +9,7 @@ import { api, type RouterOutputs } from "~/utils/api";
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import { LoaderSpinner, LoadingPage } from "~/components/loading";
+import { toast } from "react-hot-toast";
 
 dayjs.extend(relativeTime)
 
@@ -25,6 +26,14 @@ const CreatePost = () => {
     onSuccess: () => {
       setInput('')
       void ctx.post.getAll.invalidate()
+    },
+    onError: (err) => {
+      const errorMessage = err.data?.zodError?.fieldErrors.content
+      if (errorMessage && errorMessage[0]) {
+        toast.error(errorMessage[0])
+      } else {
+        toast.error('Something went wrong. Please try again later!')
+      }
     }
   })
 
@@ -62,11 +71,16 @@ const CreatePost = () => {
           required
           disabled={isPosting}
         />
-        <button
-          className="px-4 py-2 text-md bg-sky-500 rounded-3xl ml-auto"
-          type="submit"
-          disabled={isPosting}
-        >Tweet</button>
+        <div className="flex flex-row justify-end">
+          {!!isPosting &&
+            <div className="h-fit self-center"><LoaderSpinner size={24} /></div>
+          }
+          <button
+            className="px-4 py-2 text-md bg-sky-500 rounded-3xl"
+            type="submit"
+            disabled={isPosting}
+          >Tweet</button>
+        </div>
       </div>
     </form>
   )
