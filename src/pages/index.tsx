@@ -1,4 +1,4 @@
-import { SignInButton, SignOutButton, useUser } from "@clerk/nextjs";
+import { SignInButton, useUser } from "@clerk/nextjs";
 import Head from "next/head";
 import Image from "next/image";
 import { type NextPage } from "next";
@@ -8,6 +8,7 @@ import { api, type RouterOutputs } from "~/utils/api";
 
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
+import { LoaderSpinner, LoadingPage } from "~/components/loading";
 
 dayjs.extend(relativeTime)
 
@@ -65,16 +66,44 @@ const PostView = (props: {post: PostWithAuthor}) => {
           {' · '}
           <span className="font-thin">{dayjs(post.createdAt).fromNow()}</span>
         </div>
-        <p>{post.content}</p>
+        <p className="text-xl">{post.content}</p>
       </div>
     </div>
   )
 }
 
-const Home: NextPage = () => {
-  const { data, isLoading } = api.post.getAll.useQuery()
+const Feed = () => {
+  const { data, isLoading: postsLoading } = api.post.getAll.useQuery()
 
-  const user = useUser()
+  if (postsLoading)
+    return <div className="pt-52 flex"><LoaderSpinner size={30} /></div>
+
+  if (!data)
+    return <div>Something went wrong</div>
+
+  return (
+    <div className="flex flex-col">
+      {
+        data.map((post) => (
+          <PostView key={post.post.id} post={post} />
+        ))
+      }
+    </div>
+  )
+}
+
+const Home: NextPage = () => {
+  const {
+    isSignedIn: userSignedIn,
+    isLoaded: userLoading
+  } = useUser()
+
+  // since React Query fetches only once, calling this in Page Component
+  // makes sure React Query fetches the data ASAP
+  api.post.getAll.useQuery()
+
+
+  if (!userLoading) return <LoadingPage />
 
   return (
     <>
@@ -84,29 +113,24 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="flex justify-center min-h-screen">
-        <div className="w-full md:max-w-2xl border-x border-slate-400">
-          <div className="border-b border-slate-400 p-4">
-            {user.isSignedIn
-              ? <SignOutButton />
-              : <SignInButton />
-            }
-          </div>
-          <CreatePost />
-          <div className="flex flex-col">
-            {isLoading
-              ? <div>Loading...</div>
-              : (
-                !data
-                ? <div>Something went wrong</div>
-                : (
-                  data.map((post) => (
-                    <PostView key={post.post.id} post={post} />
-                  ))
-                )
-              )
-            }
-          </div>
-        </div>
+        {userSignedIn
+          ? (
+            <div className="w-full md:max-w-2xl border-x border-slate-400 relative">
+              <div className="border-b border-slate-400 p-4 sticky top-0 z-40 backdrop-blur-3xl supports-backdrop-blur:bg-white/95s">
+                <h1 className="font-semibold text-xl">Home</h1>
+              </div>
+              <CreatePost />
+              <Feed />
+            </div>
+          )
+          : (
+            <div className="w-full h-screen flex justify-center items-center">
+              <div className="px-4 py-2 text-md bg-sky-500 rounded-3xl font-semibold">
+                <SignInButton />
+              </div>
+            </div>
+          )
+        }
       </main>
     </>
   );
