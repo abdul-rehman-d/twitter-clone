@@ -2,7 +2,7 @@ import { SignInButton, useUser } from "@clerk/nextjs";
 import Head from "next/head";
 import Image from "next/image";
 import { type NextPage } from "next";
-import { type FormEvent } from "react";
+import { useState, type FormEvent } from "react";
 
 import { api, type RouterOutputs } from "~/utils/api";
 
@@ -17,10 +17,26 @@ type PostWithAuthor = RouterOutputs["post"]["getAll"][number]
 const CreatePost = () => {
   const { user } = useUser();
 
+  const [input, setInput] = useState<string>('');
+
+  const ctx = api.useContext()
+
+  const { mutate, isLoading: isPosting } = api.post.create.useMutation({
+    onSuccess: () => {
+      setInput('')
+      void ctx.post.getAll.invalidate()
+    }
+  })
+
   if (!user) return null;
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
+    if (input) {
+      mutate({
+        content: input,
+      })
+    }
   }
 
   return (
@@ -37,12 +53,19 @@ const CreatePost = () => {
           type="text"
           name="tweet"
           id="tweet"
+          value={input}
+          onChange={(e) => {
+            setInput(e.target.value)
+          }}
           placeholder="What's Happening?"
           className="text-md bg-transparent focus-visible:outline-none p-2 block"
+          required
+          disabled={isPosting}
         />
         <button
           className="px-4 py-2 text-md bg-sky-500 rounded-3xl ml-auto"
           type="submit"
+          disabled={isPosting}
         >Tweet</button>
       </div>
     </form>
