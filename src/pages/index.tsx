@@ -5,9 +5,11 @@ import Head from "next/head";
 import { api } from "~/utils/api";
 
 const Home: NextPage = () => {
-  const hello = api.example.hello.useQuery({ text: "from tRPC" });
+  const { data } = api.post.getAll.useQuery()
 
   const user = useUser()
+
+  console.log('data', data)
 
   return (
     <>
@@ -17,10 +19,19 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="flex min-h-screen flex-col items-center justify-center bg-[#15162c]">
-        {user.isSignedIn
-          ? <div className="bg-slate-300 px-2 py-1"><SignOutButton /></div>
-          : <div className="bg-slate-300 px-2 py-1"><SignInButton /></div>
-        }
+        <div className="bg-slate-300 px-2 py-1">
+          {user.isSignedIn
+            ? <SignOutButton />
+            : <SignInButton />
+          }
+        </div>
+        <div>
+          {data?.map(post => (
+            <div key={post.id}>
+              <p>{post.content}</p>
+            </div>
+          ))}
+        </div>
       </main>
     </>
   );
