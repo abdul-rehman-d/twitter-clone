@@ -4,7 +4,9 @@ import Image from "next/image";
 import { type NextPage } from "next";
 import { type FormEvent } from "react";
 
-import { api } from "~/utils/api";
+import { api, type RouterOutputs } from "~/utils/api";
+
+type PostWithAuthor = RouterOutputs["post"]["getAll"][number]
 
 const CreatePost = () => {
   const { user } = useUser();
@@ -41,12 +43,29 @@ const CreatePost = () => {
   )
 }
 
+const PostView = (props: {post: PostWithAuthor}) => {
+  const { post, author } = props.post
+  return (
+    <div className="flex flex-row p-4 gap-x-4 border-b border-slate-400">
+      <div className="bg-slate-400 rounded-full w-12 h-12 overflow-hidden relative">
+        <Image
+          src={author.profileImageUrl}
+          alt={author.username || 'User Profile'}
+          fill
+        />
+      </div>
+      <div className="flex-grow flex flex-col mb-4">
+        <span>@{author.username}</span>
+        <p>{post.content}</p>
+      </div>
+    </div>
+  )
+}
+
 const Home: NextPage = () => {
   const { data, isLoading } = api.post.getAll.useQuery()
 
   const user = useUser()
-
-  console.log('data', data)
 
   return (
     <>
@@ -71,10 +90,8 @@ const Home: NextPage = () => {
                 !data
                 ? <div>Something went wrong</div>
                 : (
-                  [...data, ...data, ...data, ...data, ...data, ...data, ...data, ...data, ...data, ...data, ...data].map(post => (
-                    <div key={post.id} className="border-b border-slate-400 p-8">
-                      <p>{post.content}</p>
-                    </div>
+                  data.map((post) => (
+                    <PostView key={post.post.id} post={post} />
                   ))
                 )
               )
