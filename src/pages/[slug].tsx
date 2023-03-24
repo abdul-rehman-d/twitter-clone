@@ -9,14 +9,16 @@ import PostView from "~/components/PostVIew";
 import PageLayout from "~/layouts/PageLayout";
 
 
-const ProfileFeed = () => {
-  const { data, isLoading: postsLoading } = api.post.getAll.useQuery()
+const ProfileFeed = (props: {userId: string}) => {
+  const { data, isLoading: postsLoading } = api.post.getPostsByUserId.useQuery({
+    userId: props.userId
+  })
 
   if (postsLoading)
     return <div className="pt-52 flex"><LoaderSpinner size={30} /></div>
 
-  if (!data)
-    return <div>Something went wrong</div>
+  if (!data || !data.length)
+    return <div>{"User hasn't posted"}</div>
 
   return (
     <div className="flex flex-col">
@@ -42,7 +44,7 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <PageLayout>
-        <ProfileFeed />
+        <ProfileFeed userId="" />
       </PageLayout>
     </>
   );

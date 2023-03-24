@@ -130,8 +130,10 @@ const Home: NextPage = () => {
         {userSignedIn
         ? <CreatePost />
         : (
-          <div className="px-4 py-2 text-md bg-sky-500 rounded-3xl font-semibold">
-            <SignInButton />
+          <div className="flex flex-row justify-center w-full py-2 border-b border-slate-400">
+            <div className="px-4 py-2 text-md bg-sky-500 rounded-3xl font-semibold">
+              <SignInButton />
+            </div>
           </div>
         )
         }
