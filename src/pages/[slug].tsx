@@ -17,7 +17,7 @@ const ProfileFeed = (props: {userId: string}) => {
   })
 
   if (postsLoading)
-    return <div className="pt-52 flex"><LoaderSpinner size={30} /></div>
+    return <div className="flex-grow flex flex-col justify-center"><LoaderSpinner size={30} /></div>
 
   if (!data || !data.length)
     return <div>{"User hasn't posted"}</div>

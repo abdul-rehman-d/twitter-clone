@@ -87,7 +87,7 @@ const PageLayout = (props: PropsWithChildren<CustomProps>) => {
           }
         </nav>
       </div>
-      <div className="relative flex-grow border-x border-slate-400 md:max-w-2xl">
+      <div className="relative flex-grow flex flex-col border-x border-slate-400 md:max-w-2xl">
         <div className="supports-backdrop-blur:bg-white/95s sticky top-0 z-40 flex flex-row items-center gap-x-2 border-b border-slate-400 p-4 backdrop-blur-3xl">
           {!!props.showBackButton && (
             <button

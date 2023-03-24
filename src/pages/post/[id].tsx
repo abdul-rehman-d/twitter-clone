@@ -24,7 +24,9 @@ const SinglePostPage: NextPage<{ id: string }> = ({ id }) => {
         headerText="Thread"
         showBackButton
       >
-        <PostView post={data} />
+        <div className="flex-grow">
+          <PostView post={data} />
+        </div>
       </PageLayout>
     </>
   );

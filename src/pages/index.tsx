@@ -90,7 +90,7 @@ const Feed = () => {
   const { data, isLoading: postsLoading } = api.post.getAll.useQuery()
 
   if (postsLoading)
-    return <div className="pt-52 flex"><LoaderSpinner size={30} /></div>
+    return <div className="flex-grow flex flex-col justify-center"><LoaderSpinner size={30} /></div>
 
   if (!data)
     return <div>Something went wrong</div>
