@@ -47,7 +47,7 @@ const ProfilePage: NextPage<{ username: string }> = ({ username }) => {
   return (
     <>
       <Head>
-        <title>{data.username}</title>
+        <title>{`${data.username ?? ""} | Twitter Clone`}</title>
       </Head>
       <PageLayout
         headerText={data.username ? `@${data.username}` : ''}
