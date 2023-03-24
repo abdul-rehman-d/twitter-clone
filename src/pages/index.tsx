@@ -52,7 +52,7 @@ const CreatePost = () => {
       <div className="bg-slate-400 rounded-full w-12 h-12 overflow-hidden relative">
         <Image
           src={user.profileImageUrl}
-          alt={user.fullName || 'User Profile Picture'}
+          alt={`@${user.username ?? ''}'s profile picture`}
           fill
         />
       </div>

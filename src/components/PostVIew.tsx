@@ -16,7 +16,7 @@ const PostView = (props: {post: PostWithAuthor}) => {
       <div className="bg-slate-400 rounded-full w-12 h-12 overflow-hidden relative">
         <Image
           src={author.profileImageUrl}
-          alt={author.username}
+          alt={`@${author.username ?? ''}'s profile picture`}
           fill
         />
       </div>
