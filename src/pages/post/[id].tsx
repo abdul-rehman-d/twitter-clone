@@ -1,24 +1,19 @@
 import Head from "next/head";
-import { GetStaticProps, type NextPage } from "next";
+import { type GetStaticProps, type NextPage } from "next";
 
 import { api } from "~/utils/api";
 
 import PostView from "~/components/PostVIew";
 import PageLayout from "~/layouts/PageLayout";
 import { generateSSGHelper } from "~/server/helpers/ssgHelper";
-import Link from "next/link";
+import { NotFound } from "~/components/404Page";
 
 const SinglePostPage: NextPage<{ id: string }> = ({ id }) => {
   const { data } = api.post.getById.useQuery({
     id
   })
 
-  if (!data) return (
-    <main className="flex flex-col justify-center items-center">
-      <h1 className="text-xl font-bold">404 | Post Not Found</h1>
-      <Link href="/" className="underline hover:text-slate-400">Go Back</Link>
-    </main>
-  )
+  if (!data) return (<NotFound name="Post" />)
 
   return (
     <>

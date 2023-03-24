@@ -1,5 +1,5 @@
 import Head from "next/head";
-import { GetStaticProps, type NextPage } from "next";
+import { type GetStaticProps, type NextPage } from "next";
 
 import { api } from "~/utils/api";
 
@@ -7,7 +7,7 @@ import { LoaderSpinner } from "~/components/loading";
 import PostView from "~/components/PostVIew";
 import PageLayout from "~/layouts/PageLayout";
 import { generateSSGHelper } from "~/server/helpers/ssgHelper";
-import Link from "next/link";
+import { NotFound } from "~/components/404Page";
 
 
 const ProfileFeed = (props: {userId: string}) => {
@@ -37,12 +37,7 @@ const ProfilePage: NextPage<{ username: string }> = ({ username }) => {
     username
   })
 
-  if (!data) return (
-    <main className="flex flex-col justify-center items-center">
-      <h1 className="text-xl font-bold">404 | User Not Found</h1>
-      <Link href="/" className="underline hover:text-slate-400">Go Back</Link>
-    </main>
-  )
+  if (!data) return (<NotFound name="User" />)
 
   return (
     <>
