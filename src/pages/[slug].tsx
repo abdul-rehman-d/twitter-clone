@@ -49,7 +49,10 @@ const ProfilePage: NextPage<{ username: string }> = ({ username }) => {
       <Head>
         <title>{data.username}</title>
       </Head>
-      <PageLayout>
+      <PageLayout
+        headerText={data.username ? `@${data.username}` : ''}
+        showBackButton
+      >
         <ProfileFeed userId={data.id} />
       </PageLayout>
     </>

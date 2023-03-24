@@ -121,7 +121,7 @@ const Home: NextPage = () => {
 
   return (
     <>
-      <PageLayout>
+      <PageLayout headerText="Home">
         {userSignedIn
         ? <CreatePost />
         : (
