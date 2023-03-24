@@ -8,6 +8,7 @@ import PostView from "~/components/PostVIew";
 import PageLayout from "~/layouts/PageLayout";
 import { generateSSGHelper } from "~/server/helpers/ssgHelper";
 import { NotFound } from "~/components/404Page";
+import Image from "next/image";
 
 
 const ProfileFeed = (props: {userId: string}) => {
@@ -48,6 +49,19 @@ const ProfilePage: NextPage<{ username: string }> = ({ username }) => {
         headerText={data.username ? `@${data.username}` : ''}
         showBackButton
       >
+        <header className="flex flex-col border-b border-slate-400 pb-4">
+          <div className="h-36 bg-gradient-to-r from-slate-800 to-slate-600" />
+          <Image
+            src={data.profileImageUrl}
+            alt={`@${data.username ?? ''}'s profile picture`}
+            width={128}
+            height={128}
+            className="-mt-[64px] rounded-full ml-4"
+          />
+          <div className="ml-4 mt-4">
+            <span className="text-2xl font-bold">{data.username ? `@${data.username}` : ''}</span>
+          </div>
+        </header>
         <ProfileFeed userId={data.id} />
       </PageLayout>
     </>
