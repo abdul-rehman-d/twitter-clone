@@ -15,4 +15,4 @@ This is built using following a [tutorial](https://www.youtube.com/watch?v=YkOSU
 ## Live Preview
 
 This project is hosted on [Vercel](https://vercel.com) and can be viewed on this link:\
-[https://twitter-clone-beta-six.vercel.app/](https://twitter-clone-beta-six.vercel.app/)
+[https://twitter-clone-abdul-rehman-d.vercel.app/](https://twitter-clone-abdul-rehman-d.vercel.app/)
