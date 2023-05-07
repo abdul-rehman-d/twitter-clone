@@ -11,8 +11,10 @@ This is built using following a [tutorial](https://www.youtube.com/watch?v=YkOSU
 - [Tailwind CSS](https://tailwindcss.com)
 - [tRPC](https://trpc.io)
 
+## Screenshot
+![Screenshot](https://github.com/abdul-rehman-d/twitter-clone/blob/main/public/screenshot.png?raw=true)
 
 ## Live Preview
 
 This project is hosted on [Vercel](https://vercel.com) and can be viewed on this link:\
-[https://twitter-clone-abdul-rehman-d.vercel.app/](https://twitter-clone-abdul-rehman-d.vercel.app/)
+[https://twitter.abdulrehmandev.me/](https://twitter.abdulrehmandev.me/)
