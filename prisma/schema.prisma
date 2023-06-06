@@ -14,5 +14,20 @@ model Post {
   content   String   @db.VarChar(255)
   authorId  String
 
+  likes     Like[]
+
   @@index([authorId])
+}
+
+model Like {
+  id        String    @id @default(cuid())
+  createdAt DateTime  @default(now())
+
+  likedBy   String
+
+  postId    String
+  post      Post      @relation(fields: [postId], references: [id])
+
+  @@index([likedBy])
+  @@index([postId])
 }
