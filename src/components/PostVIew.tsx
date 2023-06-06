@@ -30,6 +30,8 @@ const PostView = (props: {post: PostWithAuthor}) => {
     onSuccess: () => {
       void ctx.post.getAll.invalidate();
       void ctx.like.isLiked.invalidate({ postId: post.id });
+      void ctx.post.getById.invalidate({ id: post.id });
+      void ctx.post.getPostsByUserId.invalidate({ userId: author.id });
     }
   });
 
