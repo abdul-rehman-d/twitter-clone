@@ -8,6 +8,7 @@ import Link from 'next/link'
 import { useUser } from '@clerk/nextjs'
 import HeartSVG from '~/svgs/HeartSVG'
 import { toast } from 'react-hot-toast'
+import ReplySVG from '~/svgs/ReplySVG'
 
 dayjs.extend(relativeTime)
 
@@ -49,6 +50,15 @@ const PostView = (props: {post: PostWithAuthor}) => {
     });
   }
 
+  function replyTweet(e: React.MouseEvent<HTMLButtonElement>) {
+    e.stopPropagation();
+    e.preventDefault();
+    if (!isSignedIn) {
+      toast.error('Please log in first!')
+      return;
+    }
+  }
+
   return (
     <Link href={`/post/${post.id}`} className="flex flex-row p-4 gap-x-4 border-b border-slate-400">
       <div className="bg-slate-400 rounded-full w-12 h-12 overflow-hidden relative">
@@ -67,7 +77,16 @@ const PostView = (props: {post: PostWithAuthor}) => {
           <span className="font-thin">{dayjs(post.createdAt).fromNow()}</span>
         </div>
         <p className="text-xl mb-2">{post.content}</p>
-        <div>
+        <div className='flex flex-row gap-x-4'>
+          <button
+            className='group flex flex-row items-center gap-x-1 text-slate-400 hover:text-sky-500'
+            onClick={replyTweet}
+          >
+            <span className='group-hover:bg-sky-500 group-hover:bg-opacity-10 rounded-full p-1 h-7 w-7'>
+              <ReplySVG />
+            </span>
+            <span>{post._count.replies}</span>
+          </button>
           <button
             className='group flex flex-row items-center gap-x-1 text-slate-400 hover:text-red-400'
             onClick={likeOrUnlikePost}
