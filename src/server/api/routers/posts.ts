@@ -7,7 +7,7 @@ import { createTRPCRouter, privateProcedure, publicProcedure } from "~/server/ap
 import filterUserForClient from "~/server/helpers/filterUserForClient";
 
 const addUserToPosts = (async (posts: (
-  (Post & { _count: { likes: number }})
+  (Post & { _count: { likes: number, replies: number }})
 )[]) => {
   const userIds = posts.map(post => post.authorId)
   const users = (
@@ -42,7 +42,7 @@ export const postsRouter = createTRPCRouter({
       orderBy: [{ createdAt: "desc" }],
       include: {
         _count: {
-          select: { likes: true },
+          select: { likes: true, replies: true },
         },
       },
     }).then(addUserToPosts);
@@ -74,7 +74,7 @@ export const postsRouter = createTRPCRouter({
       },
       include: {
         _count: {
-          select: { likes: true },
+          select: { likes: true, replies: true },
         },
       },
     })
@@ -96,7 +96,7 @@ export const postsRouter = createTRPCRouter({
         },
         include: {
           _count: {
-            select: { likes: true },
+            select: { likes: true, replies: true },
           },
         },
         take: 100,
