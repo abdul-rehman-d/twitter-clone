@@ -12,8 +12,6 @@ import { toast } from "react-hot-toast";
 import PostView from "~/components/PostVIew";
 import PageLayout from "~/layouts/PageLayout";
 
-
-
 const CreatePost = () => {
   const { user } = useUser();
 
@@ -84,7 +82,6 @@ const CreatePost = () => {
     </form>
   )
 }
-
 
 const Feed = () => {
   const { data, isLoading: postsLoading } = api.post.getAll.useQuery()
