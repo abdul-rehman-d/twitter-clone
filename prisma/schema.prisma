@@ -15,7 +15,7 @@ model Post {
   authorId  String
 
   likes     Like[]
-  retweets  Retweet[]
+  replies   Reply[]
 
   @@index([authorId])
 }
@@ -29,31 +29,31 @@ model Like {
   postId    String?
   post      Post?      @relation(fields: [postId], references: [id])
 
-  retweetId String?
-  retweet   Retweet?   @relation(fields: [retweetId], references: [id])
+  replyId   String?
+  reply     Reply?     @relation(fields: [replyId], references: [id])
 
   @@index([likedBy])
-  @@index([retweetId])
+  @@index([replyId])
   @@index([postId])
 }
 
-model Retweet {
+model Reply {
   id          String    @id @default(cuid())
   createdAt   DateTime  @default(now())
 
-  retweetedBy String
+  repliedBy   String
 
   postId      String?
-  post        Post?      @relation(fields: [postId], references: [id])
+  post        Post?    @relation(fields: [postId], references: [id])
 
-  retweetId   String?
-  retweet     Retweet?   @relation("RetweetForRetweet", fields: [retweetId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  replyId     String?
+  reply       Reply?   @relation("ReplyForReply", fields: [replyId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
-  retweets    Retweet[]  @relation("RetweetForRetweet")
+  replies     Reply[]  @relation("ReplyForReply")
 
   likes       Like[]
 
-  @@index([retweetedBy])
-  @@index([retweetId])
+  @@index([repliedBy])
+  @@index([replyId])
   @@index([postId])
 }
