@@ -1,3 +1,4 @@
+import React from 'react'
 import Image from 'next/image'
 import { api, type RouterOutputs } from '~/utils/api'
 
@@ -26,7 +27,7 @@ const PostView = (props: {post: PostWithAuthor}) => {
     : false
   );
 
-  const mutation = api.like.likeOrDislike.useMutation({
+  const likeMutation = api.like.likeOrDislike.useMutation({
     onSuccess: () => {
       void ctx.post.getAll.invalidate();
       void ctx.like.isLiked.invalidate({ postId: post.id });
@@ -35,19 +36,21 @@ const PostView = (props: {post: PostWithAuthor}) => {
     }
   });
 
-  function likeOrUnlikePost() {
+  function likeOrUnlikePost(e: React.MouseEvent<HTMLButtonElement>) {
+    e.stopPropagation();
+    e.preventDefault();
     if (!isSignedIn) {
       toast.error('Please log in first!')
       return;
     }
 
-    mutation.mutate({
+    likeMutation.mutate({
       postId: post.id,
     });
   }
 
   return (
-    <div className="flex flex-row p-4 gap-x-4 border-b border-slate-400">
+    <Link href={`/post/${post.id}`} className="flex flex-row p-4 gap-x-4 border-b border-slate-400">
       <div className="bg-slate-400 rounded-full w-12 h-12 overflow-hidden relative">
         <Image
           src={author.profileImageUrl}
@@ -61,9 +64,7 @@ const PostView = (props: {post: PostWithAuthor}) => {
             <span>{`@${author.username}`}</span>
           </Link>
           {' · '}
-          <Link href={`/post/${post.id}`}>
-            <span className="font-thin">{dayjs(post.createdAt).fromNow()}</span>
-          </Link>
+          <span className="font-thin">{dayjs(post.createdAt).fromNow()}</span>
         </div>
         <p className="text-xl mb-2">{post.content}</p>
         <div>
@@ -78,7 +79,7 @@ const PostView = (props: {post: PostWithAuthor}) => {
           </button>
         </div>
       </div>
-    </div>
+    </Link>
   )
 }
 
