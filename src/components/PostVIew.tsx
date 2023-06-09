@@ -91,7 +91,7 @@ const PostView = (props: {post: PostWithAuthor}) => {
             <span>{post._count.replies}</span>
           </button>
           <button
-            className='group flex flex-row items-center gap-x-1 text-slate-400 hover:text-red-400'
+            className={`group flex flex-row items-center gap-x-1 hover:text-red-400 ${isLiked ? 'text-red-400' : 'text-slate-400'}`}
             onClick={likeOrUnlikePost}
           >
             <span className='group-hover:bg-red-400 group-hover:bg-opacity-10 rounded-full p-1 h-7 w-7'>
