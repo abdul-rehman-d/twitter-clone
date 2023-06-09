@@ -9,6 +9,7 @@ import { useUser } from '@clerk/nextjs'
 import HeartSVG from '~/svgs/HeartSVG'
 import { toast } from 'react-hot-toast'
 import ReplySVG from '~/svgs/ReplySVG'
+import { useReplyModal } from '~/store'
 
 dayjs.extend(relativeTime)
 
@@ -17,6 +18,7 @@ type PostWithAuthor = RouterOutputs["post"]["getAll"][number]
 const PostView = (props: {post: PostWithAuthor}) => {
   const { post, author } = props.post
   const { isSignedIn } = useUser();
+  const setReplyModal = useReplyModal(state => state.setReplyModal)
 
   const ctx = api.useContext()
 
@@ -57,6 +59,7 @@ const PostView = (props: {post: PostWithAuthor}) => {
       toast.error('Please log in first!')
       return;
     }
+    setReplyModal(props.post);
   }
 
   return (

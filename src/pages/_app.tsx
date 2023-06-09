@@ -6,6 +6,7 @@ import { api } from "~/utils/api";
 import "~/styles/globals.css";
 import { Toaster } from "react-hot-toast";
 import Head from "next/head";
+import ReplyModal from "~/components/ReplyModal";
 
 const MyApp: AppType = ({ Component, pageProps }) => {
   return (
@@ -17,6 +18,7 @@ const MyApp: AppType = ({ Component, pageProps }) => {
       </Head>
       <Toaster position="bottom-center" />
       <Component {...pageProps} />
+      <ReplyModal />
     </ClerkProvider>
   )
 };

@@ -105,4 +105,30 @@ export const postsRouter = createTRPCRouter({
       .then(addUserToPosts)
     );
   }),
+  reply: privateProcedure.input(
+    z.object({
+      postId: z.string(),
+      content: z.string().min(3).max(255)
+    })
+  ).mutation(async ({ ctx, input }) => {
+    const authorId = ctx.currentUser;
+
+    const post = await ctx.prisma.post.findUnique({
+      where: {
+        id: input.postId
+      }
+    })
+
+    if (!post) throw new TRPCError({ code: "NOT_FOUND" })
+
+    const reply = await ctx.prisma.reply.create({
+      data: {
+        repliedBy: authorId,
+        postId: input.postId,
+        content: input.content,
+      }
+    })
+
+    return reply;
+  }),
 });
