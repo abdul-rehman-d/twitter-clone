@@ -107,7 +107,7 @@ const PageLayout = (props: PropsWithChildren<CustomProps>) => {
           <span>{`Made with ❤️ by `}</span>
           <a
             className="text-slate-400 underline hover:text-slate-600"
-            href="https://abdul-rehman-d.github.io/"
+            href="https://abdulrehmandev.me/"
             target="_blank"
           >
             Abdul Rehman
