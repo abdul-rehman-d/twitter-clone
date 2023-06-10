@@ -98,14 +98,14 @@ const PostView = (props: {post: PostOrReplyWithAuthor }) => {
         />
       </div>
       <div className="flex-grow flex flex-col mb-2">
-        <div className="text-slate-300">
+        <div className="text-slate-300 text-sm">
           <Link href={`/@${author.username}`}>
             <span>{`@${author.username}`}</span>
           </Link>
           {' · '}
           <span className="font-thin">{dayjs(post.createdAt).fromNow()}</span>
         </div>
-        <p className="text-xl mb-2">{post.content}</p>
+        <p className="mb-2">{post.content}</p>
         <div className='flex flex-row gap-x-4'>
           {!isReply(props.post) && (
             <button
