@@ -1,6 +1,6 @@
-import React from 'react'
+import React, { PropsWithChildren } from 'react'
 import Image from 'next/image'
-import { api, type RouterOutputs } from '~/utils/api'
+import { api } from '~/utils/api'
 
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
@@ -10,13 +10,38 @@ import HeartSVG from '~/svgs/HeartSVG'
 import { toast } from 'react-hot-toast'
 import ReplySVG from '~/svgs/ReplySVG'
 import { useReplyModal } from '~/store'
+import type { PostOrReplyWithAuthor } from '~/types'
 
 dayjs.extend(relativeTime)
 
-type PostWithAuthor = RouterOutputs["post"]["getAll"][number]
+type WrapperProps = {
+  isReply: boolean
+  postId: string
+  className: string
+}
 
-const PostView = (props: {post: PostWithAuthor}) => {
-  const { post, author } = props.post
+const Wrapper = ({ isReply, children, className, postId }: PropsWithChildren<WrapperProps>) => {
+  if (!isReply) {
+    return (
+      <Link href={`/post/${postId}`} className={className}>
+        {children}
+      </Link>
+    )
+  }
+
+  return (
+    <div className={className}>
+      {children}
+    </div>
+  )
+}
+
+const isReply = (post: PostOrReplyWithAuthor): boolean => (
+  Boolean('repliedBy' in post.post)
+);
+
+const PostView = (props: {post: PostOrReplyWithAuthor }) => {
+  const { author, post } = props.post
   const { isSignedIn } = useUser();
   const setReplyModal = useReplyModal(state => state.setReplyModal)
 
@@ -25,7 +50,7 @@ const PostView = (props: {post: PostWithAuthor}) => {
   const isLiked = (
     isSignedIn
     ? api.like.isLiked.useQuery(
-      { postId: post.id },
+      { id: post.id, isReply: isReply(props.post) },
     ).data
     : false
   );
@@ -33,7 +58,7 @@ const PostView = (props: {post: PostWithAuthor}) => {
   const likeMutation = api.like.likeOrDislike.useMutation({
     onSuccess: () => {
       void ctx.post.getAll.invalidate();
-      void ctx.like.isLiked.invalidate({ postId: post.id });
+      void ctx.like.isLiked.invalidate({ id: post.id });
       void ctx.post.getById.invalidate({ id: post.id });
       void ctx.post.getPostsByUserId.invalidate({ userId: author.id });
     }
@@ -63,7 +88,7 @@ const PostView = (props: {post: PostWithAuthor}) => {
   }
 
   return (
-    <Link href={`/post/${post.id}`} className="flex flex-row p-4 gap-x-4 border-b border-slate-400">
+    <Wrapper postId={post.id} className="flex flex-row p-4 gap-x-4 border-b border-slate-400" isReply={isReply(props.post)}>
       <div className="bg-slate-400 rounded-full w-12 h-12 overflow-hidden relative">
         <Image
           src={author.profileImageUrl}
@@ -81,15 +106,17 @@ const PostView = (props: {post: PostWithAuthor}) => {
         </div>
         <p className="text-xl mb-2">{post.content}</p>
         <div className='flex flex-row gap-x-4'>
-          <button
-            className='group flex flex-row items-center gap-x-1 text-slate-400 hover:text-sky-500'
-            onClick={replyTweet}
-          >
-            <span className='group-hover:bg-sky-500 group-hover:bg-opacity-10 rounded-full p-1 h-7 w-7'>
-              <ReplySVG />
-            </span>
-            <span>{post._count.replies}</span>
-          </button>
+          {!isReply(props.post) && (
+            <button
+              className='group flex flex-row items-center gap-x-1 text-slate-400 hover:text-sky-500'
+              onClick={replyTweet}
+            >
+              <span className='group-hover:bg-sky-500 group-hover:bg-opacity-10 rounded-full p-1 h-7 w-7'>
+                <ReplySVG />
+              </span>
+              <span>{post._count.replies}</span>
+            </button>
+          )}
           <button
             className={`group flex flex-row items-center gap-x-1 hover:text-red-400 ${isLiked ? 'text-red-400' : 'text-slate-400'}`}
             onClick={likeOrUnlikePost}
@@ -101,7 +128,7 @@ const PostView = (props: {post: PostWithAuthor}) => {
           </button>
         </div>
       </div>
-    </Link>
+    </Wrapper>
   )
 }
 

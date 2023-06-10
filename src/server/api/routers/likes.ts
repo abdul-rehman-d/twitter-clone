@@ -34,7 +34,8 @@ export const likesRouter = createTRPCRouter({
   }),
   isLiked: privateProcedure.input(
     z.object({
-      postId: z.string(),
+      id: z.string(),
+      isReply: z.boolean(),
     })
   ).query(async ({ ctx, input }) => {
     const authorId = ctx.currentUser;
@@ -42,7 +43,11 @@ export const likesRouter = createTRPCRouter({
     const like = await ctx.prisma.like.findFirst({
       where: {
         likedBy: authorId,
-        postId: input.postId,
+        ...(
+          input.isReply
+          ? {replyId: input.id}
+          : {postId: input.id}
+        ),
       }
     })
 
