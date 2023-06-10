@@ -103,7 +103,7 @@ const MainPostView = (props: {post: RouterOutputs["post"]["getAll"][number]}) =>
   }
 
   return (
-    <div className="flex flex-col gap-y-4 p-4 border-b border-slate-400">
+    <div className={"flex flex-col gap-y-4 p-4 border-b border-slate-400 " + (isSignedIn ? "pb-2" : "")}>
       <div className="flex flex-row gap-x-4 items-center">
         <div className="bg-slate-400 rounded-full w-12 h-12 overflow-hidden relative">
           <Image

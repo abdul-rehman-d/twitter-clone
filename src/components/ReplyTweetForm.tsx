@@ -21,7 +21,7 @@ const ReplyTweetForm = ({ isPosting, onSubmit }: {
       if (!input) return;
 
       onSubmit(input)
-    }} className={"flex flex-row px-4 gap-x-2 pt-2"}>
+    }} className={"flex flex-row px-4 gap-x-2 py-2"}>
       <div className="bg-slate-400 rounded-full w-12 h-12 overflow-hidden relative">
         <Image
           src={user.profileImageUrl}
