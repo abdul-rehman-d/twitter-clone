@@ -57,10 +57,14 @@ const PostView = (props: {post: PostOrReplyWithAuthor }) => {
 
   const likeMutation = api.like.likeOrDislike.useMutation({
     onSuccess: () => {
-      void ctx.post.getAll.invalidate();
+      if (isReply(props.post)) {
+        void ctx.reply.getAllByPostId.invalidate();
+      } else {
+        void ctx.post.getAll.invalidate();
+        void ctx.post.getById.invalidate({ id: post.id });
+        void ctx.post.getPostsByUserId.invalidate({ userId: author.id });
+      }
       void ctx.like.isLiked.invalidate({ id: post.id });
-      void ctx.post.getById.invalidate({ id: post.id });
-      void ctx.post.getPostsByUserId.invalidate({ userId: author.id });
     }
   });
 
@@ -73,7 +77,8 @@ const PostView = (props: {post: PostOrReplyWithAuthor }) => {
     }
 
     likeMutation.mutate({
-      postId: post.id,
+      id: post.id,
+      isReply: isReply(props.post),
     });
   }
 

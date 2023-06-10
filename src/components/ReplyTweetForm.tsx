@@ -3,8 +3,9 @@ import React, { useState } from "react"
 import { LoaderSpinner } from "./loading"
 import { useUser } from "@clerk/nextjs"
 
-const ReplyTweetForm = ({ isPosting, onSubmit }: {
+const ReplyTweetForm = ({ isPosting, onSubmit, showBottomBorder=true }: {
   isPosting: boolean
+  showBottomBorder?: boolean
   onSubmit: (input: string) => void
 }) => {
   const { user } = useUser();
@@ -21,7 +22,7 @@ const ReplyTweetForm = ({ isPosting, onSubmit }: {
       if (!input) return;
 
       onSubmit(input)
-    }} className="flex flex-row px-4 gap-x-2 py-2 border-b border-slate-400">
+    }} className={"flex flex-row px-4 gap-x-2 " + (showBottomBorder ? 'py-2 border-b border-slate-400' : 'pt-2')}>
       <div className="bg-slate-400 rounded-full w-12 h-12 overflow-hidden relative">
         <Image
           src={user.profileImageUrl}

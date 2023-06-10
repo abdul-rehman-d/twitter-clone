@@ -5,7 +5,8 @@ import { createTRPCRouter, privateProcedure } from "~/server/api/trpc";
 export const likesRouter = createTRPCRouter({
   likeOrDislike: privateProcedure.input(
     z.object({
-      postId: z.string(),
+      id: z.string(),
+      isReply: z.boolean(),
     })
   ).mutation(async ({ ctx, input }) => {
     const authorId = ctx.currentUser;
@@ -13,7 +14,11 @@ export const likesRouter = createTRPCRouter({
     const like = await ctx.prisma.like.findFirst({
       where: {
         likedBy: authorId,
-        postId: input.postId,
+        ...(
+          input.isReply
+          ? {replyId: input.id}
+          : {postId: input.id}
+        ),
       }
     })
 
@@ -28,7 +33,11 @@ export const likesRouter = createTRPCRouter({
     return await ctx.prisma.like.create({
       data: {
         likedBy: authorId,
-        postId: input.postId,
+        ...(
+          input.isReply
+          ? {replyId: input.id}
+          : {postId: input.id}
+        ),
       }
     })
   }),
