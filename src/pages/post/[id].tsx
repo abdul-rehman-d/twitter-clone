@@ -154,7 +154,6 @@ const MainPostView = (props: {post: RouterOutputs["post"]["getAll"][number]}) =>
       <ReplyTweetForm
         onSubmit={replyTweet}
         isPosting={replyMutation.isLoading}
-        showBottomBorder={false}
       />
     </div>
   )
