@@ -1,5 +1,4 @@
 import { SignInButton, useUser } from "@clerk/nextjs";
-import Head from "next/head";
 import Image from "next/image";
 import { type NextPage } from "next";
 import { useState, type FormEvent } from "react";

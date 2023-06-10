@@ -1,4 +1,4 @@
-import React, { PropsWithChildren } from 'react'
+import React, { type PropsWithChildren } from 'react'
 import Image from 'next/image'
 import { api } from '~/utils/api'
 
@@ -47,13 +47,9 @@ const PostView = (props: {post: PostOrReplyWithAuthor }) => {
 
   const ctx = api.useContext()
 
-  const isLiked = (
-    isSignedIn
-    ? api.like.isLiked.useQuery(
-      { id: post.id, isReply: isReply(props.post) },
-    ).data
-    : false
-  );
+  const isLiked = api.like.isLiked.useQuery(
+    { id: post.id, isReply: isReply(props.post) },
+  ).data ?? false;
 
   const likeMutation = api.like.likeOrDislike.useMutation({
     onSuccess: () => {
