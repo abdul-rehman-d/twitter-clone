@@ -99,10 +99,14 @@ const CheckUserNameAndAssignOneModal = () => {
     isSuccess,
   } = api.profile.assignUsername.useMutation();
 
-  const onSubmit = (e: FormEvent) => {
+  const onSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (isSubmitting) return;
-    const username = (e.target as HTMLFormElement).username.value;
+    const username = (
+      e.target as typeof e.target & {
+        username: { value: string };
+      }
+    ).username.value;
     if (username) {
       mutate(
         {
@@ -112,7 +116,6 @@ const CheckUserNameAndAssignOneModal = () => {
           onSuccess: () => {
             toast.success("Username updated successfully!");
           },
-          onError: (err) => {},
         }
       );
     }
