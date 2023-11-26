@@ -20,26 +20,29 @@ function ReplyModal() {
 
   const { mutate, isLoading: isPosting } = api.post.reply.useMutation();
 
-  if (!post || !active || !user) return null;  
+  if (!post || !active || !user) return null;
 
   function replyTweet(input: string) {
     if (!user) {
-      toast.error('Please log in first!')
+      toast.error("Please log in first!");
       return;
     }
     if (!post) return;
 
-    mutate({
-      content: input,
-      postId: post.post.id,
-    }, {
-      onSuccess: () => {
-        void ctx.post.getAll.invalidate();
-        void ctx.post.getById.invalidate({ id: post.post.id });
-        void ctx.post.getPostsByUserId.invalidate({ userId: post.author.id });
-        closeModal();
+    mutate(
+      {
+        content: input,
+        postId: post.post.id,
+      },
+      {
+        onSuccess: () => {
+          void ctx.post.getAll.invalidate();
+          void ctx.post.getById.invalidate({ id: post.post.id });
+          void ctx.post.getPostsByUserId.invalidate({ userId: post.author.id });
+          closeModal();
+        },
       }
-    });
+    );
   }
 
   return (

@@ -38,9 +38,9 @@ type CreateContextOptions = Record<string, never>;
  * @see https://trpc.io/docs/context
  */
 export const createTRPCContext = (opts: CreateNextContextOptions) => {
-  const req = opts.req
-  const session = getAuth(req)
-  const userId = session.userId
+  const req = opts.req;
+  const session = getAuth(req);
+  const userId = session.userId;
   return {
     prisma,
     currentUser: userId,
@@ -96,18 +96,18 @@ export const createTRPCRouter = t.router;
  */
 export const publicProcedure = t.procedure;
 
-const enforceUserIsAuthed = t.middleware(async ({ctx, next}) => {
+const enforceUserIsAuthed = t.middleware(async ({ ctx, next }) => {
   if (!ctx.currentUser) {
     throw new TRPCError({
       code: "UNAUTHORIZED",
-    })
+    });
   }
 
   return next({
     ctx: {
-      currentUser: ctx.currentUser
-    }
-  })
-})
+      currentUser: ctx.currentUser,
+    },
+  });
+});
 
 export const privateProcedure = t.procedure.use(enforceUserIsAuthed);

@@ -12,6 +12,7 @@ This is built using following a [tutorial](https://www.youtube.com/watch?v=YkOSU
 - [tRPC](https://trpc.io)
 
 ## Screenshot
+
 ![Screenshot](https://github.com/abdul-rehman-d/twitter-clone/blob/main/public/screenshot.png?raw=true)
 
 ## Live Preview

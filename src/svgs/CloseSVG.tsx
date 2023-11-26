@@ -1,4 +1,4 @@
-function CloseSVG({ size = 5}: { size?: number }) {
+function CloseSVG({ size = 5 }: { size?: number }) {
   return (
     <svg
       aria-hidden="true"
@@ -13,7 +13,7 @@ function CloseSVG({ size = 5}: { size?: number }) {
         clip-rule="evenodd"
       ></path>
     </svg>
-  )
+  );
 }
 
 export default CloseSVG;

@@ -1,4 +1,4 @@
-export default function HeartSVG({ fill = false }: { fill?: boolean })  {
+export default function HeartSVG({ fill = false }: { fill?: boolean }) {
   if (fill) {
     return (
       <svg

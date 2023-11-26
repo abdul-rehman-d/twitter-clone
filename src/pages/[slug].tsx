@@ -10,35 +10,35 @@ import { generateSSGHelper } from "~/server/helpers/ssgHelper";
 import { NotFound } from "~/components/404Page";
 import Image from "next/image";
 
-
-const ProfileFeed = (props: {userId: string}) => {
+const ProfileFeed = (props: { userId: string }) => {
   const { data, isLoading: postsLoading } = api.post.getPostsByUserId.useQuery({
-    userId: props.userId
-  })
+    userId: props.userId,
+  });
 
   if (postsLoading)
-    return <div className="flex-grow flex flex-col justify-center"><LoaderSpinner size={30} /></div>
+    return (
+      <div className="flex flex-grow flex-col justify-center">
+        <LoaderSpinner size={30} />
+      </div>
+    );
 
-  if (!data || !data.length)
-    return <div>{"User hasn't posted"}</div>
+  if (!data || !data.length) return <div>{"User hasn't posted"}</div>;
 
   return (
-    <div className="flex flex-col flex-grow">
-      {
-        data.map((post) => (
-          <PostView key={post.post.id} post={post} />
-        ))
-      }
+    <div className="flex flex-grow flex-col">
+      {data.map((post) => (
+        <PostView key={post.post.id} post={post} />
+      ))}
     </div>
-  )
-}
+  );
+};
 
 const ProfilePage: NextPage<{ username: string }> = ({ username }) => {
   const { data } = api.profile.getUserByUsername.useQuery({
-    username
-  })
+    username,
+  });
 
-  if (!data) return (<NotFound name="User" />)
+  if (!data) return <NotFound name="User" />;
 
   return (
     <>
@@ -46,20 +46,22 @@ const ProfilePage: NextPage<{ username: string }> = ({ username }) => {
         <title>{`${data.username ?? ""} | Twitter Clone`}</title>
       </Head>
       <PageLayout
-        headerText={data.username ? `@${data.username}` : ''}
+        headerText={data.username ? `@${data.username}` : ""}
         showBackButton
       >
         <header className="flex flex-col border-b border-slate-400 pb-4">
           <div className="h-36 bg-gradient-to-r from-slate-800 to-slate-600" />
           <Image
             src={data.profileImageUrl}
-            alt={`@${data.username ?? ''}'s profile picture`}
+            alt={`@${data.username ?? ""}'s profile picture`}
             width={128}
             height={128}
-            className="-mt-[64px] rounded-full ml-4"
+            className="-mt-[64px] ml-4 rounded-full"
           />
           <div className="ml-4 mt-4">
-            <span className="text-2xl font-bold">{data.username ? `@${data.username}` : ''}</span>
+            <span className="text-2xl font-bold">
+              {data.username ? `@${data.username}` : ""}
+            </span>
           </div>
         </header>
         <ProfileFeed userId={data.id} />
@@ -69,15 +71,15 @@ const ProfilePage: NextPage<{ username: string }> = ({ username }) => {
 };
 
 export const getStaticProps: GetStaticProps = async (context) => {
-  const ssg = generateSSGHelper()
-  
-  const slug = context.params?.slug
+  const ssg = generateSSGHelper();
 
-  if (typeof slug !== "string") throw new Error("No Slug")
+  const slug = context.params?.slug;
 
-  const username = slug.replace("@", "")
+  if (typeof slug !== "string") throw new Error("No Slug");
 
-  await ssg.profile.getUserByUsername.prefetch({ username })
+  const username = slug.replace("@", "");
+
+  await ssg.profile.getUserByUsername.prefetch({ username });
 
   return {
     props: {
@@ -85,7 +87,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
       username,
     },
   };
-}
+};
 
 export const getStaticPaths = () => {
   return { paths: [], fallback: "blocking" };

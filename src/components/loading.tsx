@@ -2,7 +2,10 @@ import React from "react";
 
 export const LoaderSpinner = (props: { size?: number }) => {
   return (
-    <div role="status" className="flex flex-row justify-center items-center w-full">
+    <div
+      role="status"
+      className="flex w-full flex-row items-center justify-center"
+    >
       <svg
         aria-hidden="true"
         className="mr-2 inline animate-spin fill-slate-600 text-slate-200 dark:fill-slate-300 dark:text-slate-600"

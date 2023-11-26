@@ -25,7 +25,7 @@ const LogoutSVG = () => (
     height="800px"
     width="800px"
     viewBox="0 0 490.3 490.3"
-    className="relative inline-block h-7 w-7 fill-current text-slate-200 rotate-180"
+    className="relative inline-block h-7 w-7 rotate-180 fill-current text-slate-200"
   >
     <g>
       <g>
@@ -63,58 +63,58 @@ const PageLayout = (props: PropsWithChildren<CustomProps>) => {
   const { isSignedIn } = useUser();
   return (
     <>
-    <main className="relative flex min-h-screen flex-row">
-      <div
-        className="sticky top-0 bottom-0 left-0 flex h-screen w-full min-w-min flex-row justify-end p-2 lg:p-8"
-        style={{ maxWidth: "calc((100% - 42rem) / 2)" }}
-      >
-        <nav className="flex w-full max-w-xs flex-col">
-          <Link
-            href="/"
-            className="flex w-max flex-row items-center gap-x-4 rounded-full p-4 hover:bg-[#181818]"
-          >
-            <HomeSVG />
-            <span className="hidden lg:block">Home</span>
-          </Link>
-          {!!isSignedIn &&
-            <button
-              className="mt-auto flex w-max flex-row items-center gap-x-4 rounded-full p-4 hover:bg-[#181818]"
-              onClick={() => void signOut()}
+      <main className="relative flex min-h-screen flex-row">
+        <div
+          className="sticky top-0 bottom-0 left-0 flex h-screen w-full min-w-min flex-row justify-end p-2 lg:p-8"
+          style={{ maxWidth: "calc((100% - 42rem) / 2)" }}
+        >
+          <nav className="flex w-full max-w-xs flex-col">
+            <Link
+              href="/"
+              className="flex w-max flex-row items-center gap-x-4 rounded-full p-4 hover:bg-[#181818]"
             >
-              <LogoutSVG />
-              <span className="hidden lg:block">Logout</span>
-            </button>
-          }
-        </nav>
-      </div>
-      <div className="relative flex-grow flex flex-col border-x border-slate-400 md:max-w-2xl">
-        <div className="supports-backdrop-blur:bg-white/95s sticky top-0 z-40 flex flex-row items-center gap-x-2 border-b border-slate-400 p-4 backdrop-blur-3xl">
-          {!!props.showBackButton && (
-            <button
-              onClick={() => {
-                router.back();
-              }}
-            >
-              <BackArrowSVG />
-            </button>
-          )}
-          {!!props.headerText && (
-            <h1 className="text-xl font-semibold">{props.headerText}</h1>
-          )}
+              <HomeSVG />
+              <span className="hidden lg:block">Home</span>
+            </Link>
+            {!!isSignedIn && (
+              <button
+                className="mt-auto flex w-max flex-row items-center gap-x-4 rounded-full p-4 hover:bg-[#181818]"
+                onClick={() => void signOut()}
+              >
+                <LogoutSVG />
+                <span className="hidden lg:block">Logout</span>
+              </button>
+            )}
+          </nav>
         </div>
-        {props.children}
-        <footer className="sticky bottom-0 w-full border-t border-slate-400 bg-black py-1 text-center md:max-w-2xl mx-auto">
-          <span>{`Made with ❤️ by `}</span>
-          <a
-            className="text-slate-400 underline hover:text-slate-600"
-            href="https://abdulrehmandev.me/"
-            target="_blank"
-          >
-            Abdul Rehman
-          </a>
-        </footer>
-      </div>
-    </main>
+        <div className="relative flex flex-grow flex-col border-x border-slate-400 md:max-w-2xl">
+          <div className="supports-backdrop-blur:bg-white/95s sticky top-0 z-40 flex flex-row items-center gap-x-2 border-b border-slate-400 p-4 backdrop-blur-3xl">
+            {!!props.showBackButton && (
+              <button
+                onClick={() => {
+                  router.back();
+                }}
+              >
+                <BackArrowSVG />
+              </button>
+            )}
+            {!!props.headerText && (
+              <h1 className="text-xl font-semibold">{props.headerText}</h1>
+            )}
+          </div>
+          {props.children}
+          <footer className="sticky bottom-0 mx-auto w-full border-t border-slate-400 bg-black py-1 text-center md:max-w-2xl">
+            <span>{`Made with ❤️ by `}</span>
+            <a
+              className="text-slate-400 underline hover:text-slate-600"
+              href="https://abdulrehmandev.me/"
+              target="_blank"
+            >
+              Abdul Rehman
+            </a>
+          </footer>
+        </div>
+      </main>
     </>
   );
 };
